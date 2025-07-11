@@ -4,8 +4,7 @@ int yylex();
 void yyerror(const char *s);
 %}
 
-%token ID
-%token <string> NUMBER RELOP IF ELSE_IF ELSE '(' ')' '{' '}' ';'
+%token ID NUMBER RELOP IF ELSE_IF ELSE '(' ')' '{' '}' ';'
 
 %union {
     char *string;
