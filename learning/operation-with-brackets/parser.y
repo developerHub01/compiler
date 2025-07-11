@@ -1,5 +1,6 @@
 %{
 #include<stdio.h>
+#include<stdlib.h>
 int yylex();
 void yyerror(const char *s);
 %}
@@ -8,6 +9,7 @@ void yyerror(const char *s);
 
 %left '+' '-'
 %left '*' '/'
+%left UMINUS
 
 %%
 prog: expr NewLine {printf("Result = %d\n", $1); return 0;}
@@ -17,7 +19,14 @@ expr: Num
     | expr '+' expr   {$$=$1+$3;}
     | expr '-' expr   {$$=$1-$3;}
     | expr '*' expr   {$$=$1*$3;}
-    | expr '/' expr   {$$=$1/$3;}
+    | expr '/' expr   {
+        if($3 == 0){
+            yyerror("Divide by zero");
+            exit(1);
+        }
+        $$=$1/$3;
+    }
+    | '-' expr %prec UMINUS {$$=-$2;}
 
 %%
 
